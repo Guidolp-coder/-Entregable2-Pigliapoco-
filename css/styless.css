@@ -1,0 +1,55 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    padding: 20px;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+.formulario {
+    background-color: #D48C00;
+    padding: 15px;
+    border-radius: 45px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 8px;
+    margin: 5px;
+}
+
+button {
+    padding: 8px 15px;
+    cursor: pointer;
+}
+
+.producto {
+    background-color: #D48C00;
+    padding: 10px;
+    margin: 10px auto;
+    border-radius: 45px;
+    width: 60%;
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 5px 0;
+}
+
+#total {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#mensajeFinal {
+    font-weight: bold;
+    color: green;
+}

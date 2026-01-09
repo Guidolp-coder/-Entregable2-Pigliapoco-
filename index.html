@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Peluches</title>
+    <link rel="stylesheet" href="./css/styless.css">
+</head>
+
+<body>
+
+    <h1>🧸 Tienda de Peluches 🧸</h1>
+
+    <!-- Saludo -->
+    <section class="formulario">
+        <input type="text" id="nombreUsuario" placeholder="Ingresá tu nombre">
+        <button id="btnSaludar">Saludar</button>
+        <p id="saludo"></p>
+    </section>
+
+    <section class="producto">
+        <h2>Elegí tu peluche</h2>
+
+        <button class="btnPeluche" data-precio="30000" data-tamano="Grande">
+            Peluche Grande ($30000)
+        </button>
+
+        <button class="btnPeluche" data-precio="20000" data-tamano="Mediano">
+            Peluche Mediano ($20000)
+        </button>
+
+        <button class="btnPeluche" data-precio="10000" data-tamano="Chico">
+            Peluche Chico ($10000)
+        </button>
+    </section>
+
+    <section class="producto">
+        <h2>Carrito</h2>
+        <ul id="listaCarrito"></ul>
+        <p id="total"></p>
+        <button id="btnFinalizar">Finalizar compra</button>
+        <p id="mensajeFinal"></p>
+    </section>
+
+
+    <script src="./js/app.js"></script>
+</body>
+
+</html>
