@@ -1,12 +1,8 @@
-// Creo Variable localStorage para almacenamiento de datos en el navegador, totalcompra y carrito es la clave
-// para guardar el valor, Json.parse para cambiar el texto a numero si no hay un valor devuelve 0 o array vacio
-
+// Creo Variable para almacenamiento de datos.
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 let total = JSON.parse(localStorage.getItem("totalCompra")) || 0;
 
-// SELECTORES DOM, es decir selecciono elementos del html para usarlo en js, con getElementById
-// busco el elemento por su id
-
+// Selectores DOM.
 const inputNombre = document.getElementById("nombreUsuario");
 const btnSaludar = document.getElementById("btnSaludar");
 const saludoHTML = document.getElementById("saludo");
@@ -19,10 +15,10 @@ const listaCarrito = document.getElementById("listaCarrito");
 const btnFinalizar = document.getElementById("btnFinalizar");
 const mensajeFinal = document.getElementById("mensajeFinal");
 
-// los eventos son una accion que realiza el usuario en este caso un click, 
-// addEvenListener utilazamos para ver que acciones realiza el usuario,
-// con el forEach recorremos en cada botonesPeluche.
+const contenedorPeluches = document.getElementById("contenedorPeluches");
 
+
+//Eventos
 btnSaludar.addEventListener("click", saludarUsuario);
 
 botonesPeluches.forEach(boton => {
@@ -31,10 +27,7 @@ botonesPeluches.forEach(boton => {
 
 btnFinalizar.addEventListener("click", finalizarCompra);
 
-
-// Esta función obtiene el nombre ingresado por el usuario y
-// si no está vacío, muestra un saludo personalizado en el HTML utilizando textContent.
-
+// Función Saludo.
 function saludarUsuario() {
     const nombre = inputNombre.value;
 
@@ -43,43 +36,56 @@ function saludarUsuario() {
     }
 }
 
-//Declaro la funcion sumarPeluche, "e" es el evento que se utiliza cuando el usuario hace click
-//siempre devuelve string, por eso usamos Number, toma el precio de ese boton y lo  suma al total.
-//data-precio y data-tamaño queda disponible para js con dataset para asociarlo a cada boton,
-//Añado con .push los elementos del Array ,lo sumo al total,lo muestro en pantalla y lo guarda.
-
-function sumarPeluche(e) {
-    const precio = Number(e.target.dataset.precio);
-    const tamano = e.target.dataset.tamano;
-
+//Logica del carrito.
+function agregarPeluche(tamano, precio) {
     carrito.push({ tamano, precio });
     total += precio;
-
-    totalHTML.textContent = `El total hasta el momento es de $${total}`;
-
     guardarStorage();
+}
+//Eventos del boton
+function sumarPeluche(e) {
+    const boton = e.currentTarget;
+
+    const precio = Number(boton.dataset.precio);
+    const tamano = boton.dataset.tamano;
+
+    agregarPeluche(tamano, precio);
+    actualizarVista();
+}
+//Funciones Dom
+function actualizarVista() {
     mostrarCarrito();
+    mostrarTotal();
 }
 
-//Declaro la funcion , limpio el contenido anterior, forEach recorre todo el array, 
-//ponemos el texto dentro y Creamos el elemento li para que appendChild lo sume al ul.
+function mostrarTotal() {
+    totalHTML.textContent = total > 0
+        ? `El total hasta el momento es de $${total}`
+        : "";
+}
 
 function mostrarCarrito() {
     listaCarrito.innerHTML = "";
 
-    carrito.forEach((peluche, index) => {
+    carrito.forEach(peluche => {
         const li = document.createElement("li");
         li.textContent = `${peluche.tamano} - $${peluche.precio}`;
         listaCarrito.appendChild(li);
     });
 }
-
-//Se ejecuta cuando el usuario hace click en el botón Finalizar compra,muetra el msj en el html 
-//con textContent. Con removeItem borramos la ultima compra sin quedar el ultimo total guardado.
-//igual a cero y corchetes vacios permiten comenzar una nueva compra.
-
+//Uso de libreria
 function finalizarCompra() {
-    mensajeFinal.textContent = `Gracias por confiar en Tienda Peluches!! Total: $${total}`;
+    
+    Swal.fire({
+        icon: "success",
+        title: "¡Compra realizada!",
+        html: `
+            <p>Gracias por confiar en <b>Tienda de Peluches</b> 🧸</p>
+            <p><b>Total:</b> $${total}</p>
+        `,
+        confirmButtonText: "Genial",
+    });
+
 
     carrito = [];
     total = 0;
@@ -91,19 +97,43 @@ function finalizarCompra() {
     totalHTML.textContent = "";
 }
 
-// ejecutamos con el if y mostramos que si el total es mayor a 0 entra, en ese caso,
-// lo muestra en el DOM al cargar la página.
-
 if (total > 0) {
     totalHTML.textContent = `El total hasta el momento es de $${total}`;
 }
-
-//Guarda el valor del total de la compra en el localStorage del navegador
-//y JSON.stringifi nos guarda los datos correctamente en texto.
 
 function guardarStorage() {
     localStorage.setItem("carrito", JSON.stringify(carrito));
     localStorage.setItem("totalCompra", JSON.stringify(total));
 }
+
+//Función asincrónica con fetch
+function cargarPeluches() {
+    fetch("./assets/data/peluches.json")
+        .then(response => response.json())
+        .then(data => {
+            crearBotonesPeluches(data);
+        })
+        .catch(error => {
+            console.error("Error al cargar los peluches:", error);
+        });
+}
+
+function crearBotonesPeluches(peluches) {
+    peluches.forEach(peluche => {
+        const button = document.createElement("button");
+
+        button.classList.add("btnPeluche");
+        button.dataset.precio = peluche.precio;
+        button.dataset.tamano = peluche.tamano;
+
+        button.textContent = `Peluche ${peluche.tamano} ($${peluche.precio})`;
+
+        button.addEventListener("click", sumarPeluche);
+
+        contenedorPeluches.appendChild(button);
+    });
+}
+cargarPeluches();
+
 
 

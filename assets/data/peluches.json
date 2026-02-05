@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "tamano": "Grande",
+    "precio": 30000
+  },
+  {
+    "id": 2,
+    "tamano": "Mediano",
+    "precio": 20000
+  },
+  {
+    "id": 3,
+    "tamano": "Chico",
+    "precio": 10000
+  }
+]
